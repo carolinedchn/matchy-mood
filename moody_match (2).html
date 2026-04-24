@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Moody Match</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap" rel="stylesheet"/>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.material-symbols-outlined { font-family: 'Material Symbols Outlined'; font-style: normal; font-size: 20px; line-height: 1; letter-spacing: normal; text-transform: none; display: inline-block; white-space: nowrap; direction: ltr; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+
+body { min-height: 100vh; display: flex; flex-direction: column; background: #F5F1E8; font-family: 'Inter', sans-serif; }
+
+header { background: #F5F1E8; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+.logo { font-size: 22px; font-weight: 900; color: #000; letter-spacing: -0.03em; }
+.nav-links { display: flex; gap: 28px; }
+.nav-links a { font-size: 14px; font-weight: 600; color: #000; text-decoration: none; }
+.nav-links a.muted { color: rgba(0,0,0,0.4); font-weight: 500; }
+.header-icon { background: none; border: none; cursor: pointer; display: flex; align-items: center; color: #000; }
+
+main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px 16px 100px; }
+
+.card { background: #D8CFF7; width: 100%; max-width: 600px; border-radius: 16px; padding: 36px 32px; }
+
+.card-header { text-align: center; margin-bottom: 32px; }
+.card-title { font-size: 22px; font-weight: 900; color: #000; letter-spacing: -0.02em; text-transform: uppercase; margin-bottom: 6px; }
+.card-subtitle { font-size: 14px; color: #000; font-weight: 500; }
+
+.section-label { font-size: 11px; font-weight: 700; color: #000; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 14px; }
+
+.form-section { margin-bottom: 24px; }
+
+.input-group { flex: 1; }
+.input-group label { display: block; font-size: 12px; color: #000; margin-bottom: 6px; margin-left: 2px; font-weight: 600; }
+.input-group input { width: 100%; background: #fff; border: none; border-radius: 12px; padding: 0 16px; font-family: 'Inter', sans-serif; font-size: 14px; color: #000; height: 52px; outline: none; transition: box-shadow 0.15s; }
+.input-group input:focus { box-shadow: 0 0 0 2px rgba(0,0,0,0.2); }
+.input-group input::placeholder { color: rgba(0,0,0,0.35); }
+.input-group select { width: 100%; background: #fff; border: none; border-radius: 12px; padding: 0 16px; font-family: 'Inter', sans-serif; font-size: 14px; color: #000; height: 52px; outline: none; transition: box-shadow 0.15s; -webkit-appearance: none; appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23000' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; }
+.input-group select:focus { box-shadow: 0 0 0 2px rgba(0,0,0,0.2); }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.slider-section { margin-bottom: 24px; }
+.slider-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.slider-label { font-size: 14px; color: #000; font-weight: 600; }
+.slider-value { font-size: 14px; font-weight: 700; color: #000; }
+.slider-value span { font-weight: 400; color: rgba(0,0,0,0.35); }
+
+input[type=range] { -webkit-appearance: none; width: 100%; height: 6px; border-radius: 3px; background: rgba(0,0,0,0.12); outline: none; cursor: pointer; }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: #000; border: 3px solid #D8CFF7; cursor: pointer; }
+input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: #000; border: 3px solid #D8CFF7; cursor: pointer; }
+
+.cta-btn { width: 100%; height: 68px; background: #fff; color: #000; border: none; border-radius: 12px; font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: opacity 0.15s, transform 0.1s; margin-top: 8px; }
+.cta-btn:hover { opacity: 0.88; }
+.cta-btn:active { transform: scale(0.98); }
+.cta-btn.loading { opacity: 0.5; pointer-events: none; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+.result-area { background: rgba(255,255,255,0.6); border-radius: 14px; padding: 20px; margin-top: 16px; animation: fadeIn 0.4s ease; }
+.result-area h3 { font-size: 13px; font-weight: 700; color: rgba(0,0,0,0.4); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.result-area p { font-size: 14px; color: #000; line-height: 1.6; }
+.result-tag { display: inline-block; background: rgba(0,0,0,0.07); border-radius: 6px; padding: 3px 10px; font-size: 12px; font-weight: 600; color: rgba(0,0,0,0.6); margin: 4px 3px 0 0; }
+
+nav.bottom { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: #F5F1E8; padding: 10px 24px 20px; border-top: 0.5px solid rgba(0,0,0,0.08); justify-content: space-around; z-index: 10; }
+.bottom-item { display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: rgba(0,0,0,0.4); }
+.bottom-item.active { background: #D8CFF7; border-radius: 12px; padding: 8px 16px; color: #000; }
+
+@media (max-width: 600px) {
+  .nav-links { display: none; }
+  .card { padding: 24px 20px; }
+  .grid-2 { grid-template-columns: 1fr; }
+  nav.bottom { display: flex; }
+  main { padding-bottom: 120px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Moody Match</div>
+  <div class="nav-links">
+    <a href="#">Session</a>
+    <a href="#" class="muted">Journal</a>
+    <a href="#" class="muted">Paramètres</a>
+  </div>
+  <button class="header-icon">
+    <span class="material-symbols-outlined">account_circle</span>
+  </button>
+</header>
+
+<main>
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">MOODY MATCH</div>
+      <p class="card-subtitle">Votre bande-son personnalisée pour chaque moment</p>
+    </div>
+
+    <div class="form-section">
+      <div class="section-label">Localisation &amp; Météo</div>
+      <div class="input-group">
+        <label>Ville</label>
+        <input type="text" id="ville" placeholder="Paris" value="Paris"/>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-label">Votre Moment</div>
+      <div class="grid-2">
+        <div class="input-group">
+          <label>Activité</label>
+          <select id="activite">
+            <option value="cuisine">Cuisine</option>
+            <option value="transport">Transport</option>
+            <option value="travail" selected>Travail</option>
+            <option value="sport">Sport</option>
+            <option value="detente">Détente</option>
+            <option value="douche">Douche</option>
+            <option value="sociabilisation">Sociabilisation</option>
+            <option value="lecture">Lecture</option>
+            <option value="meditation">Méditation</option>
+            <option value="marche">Marche</option>
+            <option value="repos">Repos</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Objectif</label>
+          <select id="objectif">
+            <option value="se motiver">Se motiver</option>
+            <option value="focus" selected>Focus</option>
+            <option value="se detendre">Se détendre</option>
+            <option value="s'evader">S'évader</option>
+            <option value="se divertir">Se divertir</option>
+            <option value="apprendre">Apprendre</option>
+            <option value="se defouler">Se défouler</option>
+            <option value="se reveiller">Se réveiller</option>
+            <option value="calmer l'esprit">Calmer l'esprit</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Humeur</label>
+          <select id="humeur">
+            <option value="joyeux" selected>Joyeux</option>
+            <option value="anxieux">Anxieux</option>
+            <option value="concentre">Concentré</option>
+            <option value="fatigue">Fatigué</option>
+            <option value="melancolique">Mélancolique</option>
+            <option value="stresse">Stressé</option>
+            <option value="excite">Excité</option>
+            <option value="calme">Calme</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Lieu</label>
+          <select id="lieu">
+            <option value="chez soi" selected>Chez soi</option>
+            <option value="bureau">Bureau</option>
+            <option value="exterieur">Extérieur</option>
+            <option value="salle de sport">Salle de sport</option>
+            <option value="transport">Transport</option>
+            <option value="nature">Nature</option>
+          </select>
+        </div>
+        <div class="input-group" style="grid-column: 1 / -1">
+          <label>Durée disponible (minutes)</label>
+          <input type="number" id="duree" placeholder="30" value="30" min="5" max="180"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="slider-section">
+      <div class="slider-header">
+        <span class="slider-label">Niveau d'énergie</span>
+        <span class="slider-value"><span id="energieVal">5</span><span>/10</span></span>
+      </div>
+      <input type="range" min="1" max="10" value="5" step="1" id="energieSlider" oninput="document.getElementById('energieVal').textContent=this.value; updateSliderBg(this)"/>
+    </div>
+
+    <button class="cta-btn" id="ctaBtn" onclick="genererSession()">
+      Générer ma session sonore
+    </button>
+
+    <div id="resultArea" style="display:none"></div>
+  </div>
+</main>
+
+<nav class="bottom">
+  <a href="#" class="bottom-item active">
+    <span class="material-symbols-outlined">graphic_eq</span>
+    Session
+  </a>
+  <a href="#" class="bottom-item">
+    <span class="material-symbols-outlined">history</span>
+    Journal
+  </a>
+  <a href="#" class="bottom-item">
+    <span class="material-symbols-outlined">settings</span>
+    Paramètres
+  </a>
+</nav>
+
+<script>
+// ── Slider ──────────────────────────────────────────────────────────────────
+function updateSliderBg(el) {
+  const pct = (el.value - el.min) / (el.max - el.min) * 100;
+  el.style.background = `linear-gradient(to right, #000 ${pct}%, rgba(0,0,0,0.12) ${pct}%)`;
+}
+updateSliderBg(document.getElementById('energieSlider'));
+
+// ── NarrativeDirector (fidèle au notebook) ───────────────────────────────────
+function defineNarrativeArc(activite, objectif, energie) {
+  const act = activite.toLowerCase();
+  const goal = objectif.toLowerCase();
+  const e = parseInt(energie);
+
+  if (["se motiver", "se defouler", "se reveiller"].includes(goal)) {
+    const intensity = e < 5 ? 7 : 9;
+    return [{type:"music", ratio:1.0, intensity, vibes:["upbeat","high-energy","rhythmic"]}];
+  }
+  if (["focus", "apprendre"].includes(goal)) {
+    return [
+      {type:"music",      ratio:0.85, intensity:4, vibes:["instrumental","lo-fi","deep-focus"]},
+      {type:"voice_guide",ratio:0.15, intensity:2, vibes:["productivity-tip","mindfulness"]}
+    ];
+  }
+  if (["se detendre", "s'evader", "calmer l'esprit"].includes(goal)) {
+    if (act === "douche") {
+      return [
+        {type:"ambient", ratio:0.3, intensity:3, vibes:["water","spa","echo"]},
+        {type:"music",   ratio:0.7, intensity:3, vibes:["ambient-pop","dreamy"]}
+      ];
+    }
+    return [
+      {type:"music",   ratio:0.9, intensity:3, vibes:["chillout","acoustic","slow-tempo"]},
+      {type:"ambient", ratio:0.1, intensity:2, vibes:["nature","soft-textures"]}
+    ];
+  }
+  return [{type:"music", ratio:1.0, intensity:5, vibes:["neutral","balanced-flow"]}];
+}
+
+// ── AIAgentWellness (fidèle au notebook) ─────────────────────────────────────
+function checkWellness(energie, lieu, momentJournee) {
+  const e = parseInt(energie);
+  const loc = lieu.toLowerCase();
+  const tod = momentJournee.toLowerCase();
+  if (["nuit","soir"].includes(tod) && e < 5)
+    return `Mode Récupération : à cette heure (${tod}), les pics d'intensité sont lissés pour protéger votre système nerveux à ${loc}.`;
+  if (e >= 8)
+    return `Mode Performance : votre vitalité de ${e}/10 permet de pousser la dynamique sonore sans stress acoustique.`;
+  if (["transport","exterieur"].includes(loc))
+    return `Mode Masquage : calibration spécifique pour émerger du bruit ambiant de ${loc} tout en restant relaxant.`;
+  return `Mode Équilibre : flux synchronisé sur votre rythme de ${tod} pour une cohérence cardiaque optimale.`;
+}
+
+// ── Moment de la journée (auto) ───────────────────────────────────────────────
+function getMomentJournee() {
+  const h = new Date().getHours();
+  if (h >= 5  && h < 12) return "matin";
+  if (h >= 12 && h < 14) return "midi";
+  if (h >= 14 && h < 18) return "après-midi";
+  if (h >= 18 && h < 23) return "soir";
+  return "nuit";
+}
+
+// ── Archive.org fetch ─────────────────────────────────────────────────────────
+async function fetchArchivePool(limit = 20) {
+  try {
+    const res = await fetch(
+      `https://archive.org/advancedsearch.php?q=collection:etree&output=json&rows=${limit}&page=1`
+    );
+    const data = await res.json();
+    return data?.response?.docs || [];
+  } catch { return []; }
+}
+
+function pickRandom(pool) {
+  if (!pool.length) return null;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+// ── AIAgentAnalyst (fidèle au notebook) ──────────────────────────────────────
+function analyzeItem(activite, objectif, item) {
+  const creator = item?.creator || "Artiste Inconnu";
+  const act = activite.toLowerCase();
+  const goal = objectif.toLowerCase();
+  const templates = {
+    "se motiver": [
+      `Le rythme pulsé de ${creator} est votre meilleur allié pour transformer votre session de ${act} en moment de haute performance.`,
+      `L'énergie de ${creator} a été spécifiquement choisie pour synchroniser votre effort sur ${act}.`
+    ],
+    "focus": [
+      `Cette pièce de ${creator} instaure une bulle de concentration, stabilisant votre flux mental pendant que vous travaillez sur ${act}.`,
+      `L'architecture sonore de ${creator} minimise les distractions cognitives pour ${act}.`
+    ],
+    "se detendre": [
+      `Les nappes harmoniques de ${creator} favorisent la décompression nécessaire pour votre moment de ${act}.`,
+      `Une invitation au lâcher-prise signée ${creator}, idéale pour accompagner ${act}.`
+    ]
+  };
+  const opts = templates[goal] || [`L'esthétique de ${creator} s'aligne intuitivement avec l'ambiance recherchée pour ${act}.`];
+  return opts[Math.floor(Math.random() * opts.length)];
+}
+
+function consultItem(item) {
+  const year = String(item?.date || "????").slice(0, 4);
+  return `Archive de ${year} : un enregistrement live authentique qui capture l'essence recherchée.`;
+}
+
+function detectVibe(item) {
+  const tags = JSON.stringify(item?.subject || []).toLowerCase();
+  const texture = tags.includes("live") ? "organique" : "studio";
+  return `Texture ${texture} détectée : parfaite pour une immersion spatiale.`;
+}
+
+// ── Rendu résultat ────────────────────────────────────────────────────────────
+function afficherResultat(arc, segments, pool, activite, objectif, energie, lieu, temps) {
+  const ra = document.getElementById('resultArea');
+  ra.style.display = 'block';
+  const moment = getMomentJournee();
+  const wellness = checkWellness(energie, lieu, moment);
+
+  const typeLabels = { music: "Musique", ambient: "Ambiance", voice_guide: "Guide vocal" };
+  const typeIcons  = { music: "music_note", ambient: "spa", voice_guide: "record_voice_over" };
+
+  let segsHTML = "";
+  segments.forEach(seg => {
+    const dureeMin = Math.round(seg.ratio * parseInt(temps));
+    const icon = typeIcons[seg.type] || "music_note";
+    const label = typeLabels[seg.type] || seg.type;
+    const tags = seg.vibes.map(v => `<span class="result-tag">${v}</span>`).join("");
+
+    let musicBlock = "";
+    if (seg.type === "music" || seg.type === "ambient") {
+      const item = pickRandom(pool);
+      if (item) {
+        const title = (item.title || "").split(" on ")[0].slice(0, 55);
+        const creator = item.creator || "";
+        const analyse = analyzeItem(activite, objectif, item);
+        const consult = consultItem(item);
+        const vibe = detectVibe(item);
+        const link = `https://archive.org/details/${item.identifier}`;
+        musicBlock = `
+          <div style="background:rgba(0,0,0,0.04);border-radius:10px;padding:12px 14px;margin-top:10px;font-size:13px;line-height:1.6;">
+            <div style="font-weight:700;color:#000;margin-bottom:2px">${title}${creator ? ` — <span style="font-weight:400">${creator}</span>` : ""}</div>
+            <div style="color:rgba(0,0,0,0.55);margin-bottom:4px">${analyse}</div>
+            <div style="color:rgba(0,0,0,0.4);font-size:12px;margin-bottom:4px">${consult}</div>
+            <div style="color:rgba(0,0,0,0.4);font-size:12px;margin-bottom:8px">${vibe}</div>
+            <a href="${link}" target="_blank" style="font-size:12px;font-weight:600;color:#000;text-decoration:underline;text-underline-offset:2px;">Écouter sur Archive.org →</a>
+          </div>`;
+      }
+    }
+
+    segsHTML += `
+      <div style="margin-bottom:18px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+          <span class="material-symbols-outlined" style="font-size:18px;opacity:0.45">${icon}</span>
+          <span style="font-size:14px;font-weight:700;color:#000">${label}</span>
+          <span style="font-size:13px;color:rgba(0,0,0,0.4)">${dureeMin} min</span>
+        </div>
+        <div>${tags}</div>
+        ${musicBlock}
+      </div>`;
+  });
+
+  ra.innerHTML = `
+    <div class="result-area">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h3 style="margin:0">Votre session · ${moment}</h3>
+        <span style="font-size:12px;font-weight:600;color:rgba(0,0,0,0.35)">${parseInt(temps)} min</span>
+      </div>
+      ${segsHTML}
+      <div style="border-top:1px solid rgba(0,0,0,0.08);padding-top:12px;margin-top:4px;">
+        <div style="font-size:11px;font-weight:700;color:rgba(0,0,0,0.35);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:5px;">Bien-être</div>
+        <p style="font-size:13px;color:rgba(0,0,0,0.6);font-style:italic">${wellness}</p>
+      </div>
+    </div>`;
+}
+
+// ── CTA principal ─────────────────────────────────────────────────────────────
+async function genererSession() {
+  const activite = document.getElementById('activite').value;
+  const objectif = document.getElementById('objectif').value;
+  const humeur   = document.getElementById('humeur').value;
+  const lieu     = document.getElementById('lieu').value;
+  const temps    = parseInt(document.getElementById('duree').value) || 30;
+  const energie  = document.getElementById('energieSlider').value;
+  const ville    = document.getElementById('ville').value || 'Paris';
+
+  const btn = document.getElementById('ctaBtn');
+  btn.classList.add('loading');
+  btn.textContent = 'Chargement…';
+
+  const ra = document.getElementById('resultArea');
+  ra.style.display = 'none';
+
+  try {
+    // 1. Arc narratif selon la logique NarrativeDirector du notebook
+    const arc = defineNarrativeArc(activite, objectif, energie);
+
+    // 2. Récupération du pool Archive.org
+    btn.textContent = 'Récupération des pistes…';
+    const pool = await fetchArchivePool(20);
+
+    // 3. Affichage
+    afficherResultat(arc, arc, pool, activite, objectif, energie, lieu, temps);
+
+  } catch(e) {
+    ra.style.display = 'block';
+    ra.innerHTML = '<div class="result-area"><p style="color:rgba(0,0,0,0.5)">Impossible de générer la session. Veuillez réessayer.</p></div>';
+  }
+
+  btn.classList.remove('loading');
+  btn.textContent = 'Générer ma session sonore';
+}
+</script>
+
+</body>
+</html>
